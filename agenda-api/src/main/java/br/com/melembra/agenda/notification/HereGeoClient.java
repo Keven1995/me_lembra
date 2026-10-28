@@ -1,8 +1,8 @@
 package br.com.melembra.agenda.notification;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class HereGeoClient {
@@ -28,7 +30,7 @@ public class HereGeoClient {
     public List<Place> search(String query) {
         if (apiKey.isBlank()) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                "Configure HERE_API_KEY no servidor para pesquisar endereços.");
+                "Configure HERE_API_SECRET_KEY no servidor para pesquisar endereços.");
         }
         if (query == null || query.trim().length() < 4 || query.length() > 180) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Informe pelo menos quatro caracteres.");

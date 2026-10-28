@@ -32,7 +32,7 @@ app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
   time-zone: ${APP_TIME_ZONE:America/Sao_Paulo}
   here:
-    api-key: ${HERE_API_KEY:}
+    api-key: ${HERE_API_SECRET_KEY:}
   location:
     gps-max-age-minutes: ${GPS_MAX_AGE_MINUTES:30}
   push:

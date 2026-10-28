@@ -45,7 +45,7 @@ Requisitos: Node 20+, Java 17+, Maven 3.9+, Docker e projeto OAuth configurado n
 
 ### Previsão do tempo e trânsito no lembrete de 1h
 
-1. Crie uma chave de API no [HERE Platform](https://platform.here.com/) com acesso a **Geocoding & Search** e **Routing API v8**. Confira o plano, cotas, condições e cobrança da conta HERE antes de usar; os limites gratuitos podem mudar. Configure `HERE_API_KEY` no `agenda-api/.env` ou no ambiente da hospedagem. **A chave só fica no backend**, nunca no frontend.
+1. Crie uma chave de API no [HERE Platform](https://platform.here.com/) com acesso a **Geocoding & Search** e **Routing API v8**. Confira o plano, cotas, condições e cobrança da conta HERE antes de usar; os limites gratuitos podem mudar. Configure `HERE_API_SECRET_KEY` no `agenda-api/.env` ou no ambiente da hospedagem. **A chave só fica no backend**, nunca no frontend.
 2. No aplicativo, em **Origem para o trânsito**, escolha **Usar minha localização atual** e aceite a permissão do navegador. Também recomendamos cadastrar um **Endereço de reserva**: pesquise e selecione um resultado da HERE.
 3. Ao cadastrar ou editar um compromisso, preencha **Onde?**, clique em **Buscar** e **selecione um endereço**. Só assim o evento terá coordenadas suficientes para consultar previsão e rota; texto de local digitado sem selecionar funciona apenas como descrição.
 4. A 1h do início, o servidor consulta a previsão no destino via [Open-Meteo Forecast API](https://open-meteo.com/en/docs) e a duração/atraso de trânsito de carro via [HERE Routing v8](https://www.here.com/docs/bundle/routing-api-v8-api-reference/page/index.html). A rota é calculada **na hora do aviso**, não continuamente. O texto também sugere horário para sair, com 10 minutos de margem operacional (configuração inicial).
@@ -77,7 +77,7 @@ No iPhone, é necessário instalar pela opção **Adicionar à Tela de Início**
 ## Segurança e produção
 
 - Não versione `.env`, chaves VAPID privadas ou credenciais OAuth.
-- Não exponha `HERE_API_KEY` no bundle JavaScript, nos logs ou no repositório. Acompanhe o consumo da sua franquia HERE.
+- Não exponha `HERE_API_SECRET_KEY` no bundle JavaScript, nos logs ou no repositório. Acompanhe o consumo da sua franquia HERE.
 - Use PostgreSQL em um banco separado do Agenda Instituto Dor.
 - Cookies de sessão seguros e CORS restrito ao frontend.
 - Mutations exigem token CSRF emitido pela API e enviado no cabeçalho `X-XSRF-TOKEN`. **Antes de publicar:** revisar cookies/CORS para domínios finais, testar instalação e push reais em Android/iOS, adicionar testes de integração do scheduler com concorrência e tratamento de subscriptions inválidas (HTTP 404/410). Para múltiplas instâncias, validar estratégia de locking/fila.

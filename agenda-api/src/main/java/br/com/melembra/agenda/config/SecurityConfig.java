@@ -26,11 +26,19 @@ import org.springframework.beans.factory.annotation.Value;
 public class SecurityConfig {
     @Value("${app.frontend-url:http://localhost:5173}")
     private String frontendUrl;
+    @Value("${server.servlet.session.cookie.secure:false}")
+    private boolean sessionCookieSecure;
+    @Value("${server.servlet.session.cookie.same-site:lax}")
+    private String sessionCookieSameSite;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        var csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        csrfTokenRepository.setCookieCustomizer(cookie -> cookie
+            .secure(sessionCookieSecure)
+            .sameSite(sessionCookieSameSite));
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+            .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/health", "/api/auth/**", "/oauth2/**", "/login/**", "/error").permitAll()
